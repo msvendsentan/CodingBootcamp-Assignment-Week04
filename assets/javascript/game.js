@@ -69,6 +69,12 @@ $(document).ready(function() {
 
     //New game button, full reinitialization.
     function newGame() {
+
+        $("#" + ourCharacter).removeClass("us");
+        for (var i = 0; i < enemies.length; i++) {
+            $("#" + enemies[i]).removeClass("enemies");
+        }
+
         gameState = 0;
         battleVictoryCounter = 0;
         enemies = ["gunner", "swordsman", "archer", "mage"];
@@ -84,6 +90,8 @@ $(document).ready(function() {
         swordsman["counterAttackPower"] = 25;
         archer["counterAttackPower"] = 25;
         mage["counterAttackPower"] = 25;
+
+        
 
         $("#gunner").empty().html("<img src=\"./assets/images/gunner.jpg\">").prepend("<p class=\"name\">" + gunner["name"] + "</p>").append("<p class=\"health_points\">HP: " + gunner["healthPoints"] + "</p>");
         $("#swordsman").empty().html("<img src=\"./assets/images/swordsman.jpg\">").prepend("<p class=\"name\">" + swordsman["name"] + "</p>").append("<p class=\"health_points\">HP: " + swordsman["healthPoints"] + "</p>");
