@@ -8,40 +8,54 @@
     </head>
 
     <body>
+        <header>
+            <h1>Stick Figure Showdown</h1>
+            <h2>An RPG for the U of T Coding Bootcamp</h2>
+            <h3>Michael Svendsen</h3>
+        </header>
 
-        <div class="clear" id="pick_character"><h2>Pick a character</h2>
-
-            <div class="character" id="gunner"><img src="./assets/images/gunner.jpg"></div>
-            <div class="character" id="swordsman"><img src="./assets/images/swordsman.jpg"></div>
-            <div class="character" id="archer"><img src="./assets/images/archer.jpg"></div>
-            <div class="character" id="mage"><img src="./assets/images/mage.jpg"></div>
-
-        </div>
-        <div class="clear" id="selected_character"><h2>Your selected character</h2>
-
-
-        </div>
-        <div class="clear" id="enemies_available"><h2>Enemies available to attack</h2>
-
-
+        <div id="instructions"><h2>Instructions</h2>
+            <div><p id="instructions_text">Welcome to the Stickfigure Showdown! Choose a character to get started...</p></div>
         </div>
 
-        <div class="clear" id="fight_selection"><h2>Fight Selection</h2>
+        <div class="grid">
+
+            <div id="character_window">
+                <h2>Character Selection</h2>
+
+                <div class="character" id="gunner"><img src="./assets/images/gunner.jpg"></div>
+                <div class="character" id="swordsman"><img src="./assets/images/swordsman.jpg"></div>
+                <div class="character" id="archer"><img src="./assets/images/archer.jpg"></div>
+                <div class="character" id="mage"><img src="./assets/images/mage.jpg"></div>
+
+            </div>
+
+            <div id="enemies_available">
+                <h2>Enemies Available</h2>
 
 
-        </div>
-        <div class="clear">
-            <button id="attack">Attack</button>
-            <button id="new_game">New Game</button>
-        </div>
-
-        <div class="clear" id="log"><h2>Log</h2>
-            <div id="log_text"></div>
+            </div>
 
 
-        </div>
-        <div class="clear" id="defeated_enemies"><h2>Defeated Enemies</h2>
+            <div id="attack">
+                <button id="attack_button">Attack</button>
 
+            </div>
+
+            <div id="log">
+                <h2>Log</h2>
+                <div id="log_text"></div>
+
+
+            </div>
+            <div id="defeated_enemies">
+                <h2>Defeated Enemies</h2>
+            
+            </div>
+
+            <div id="new_game">
+                <button id="newgame_button">New Game</button>
+            </div>
 
         </div>
 

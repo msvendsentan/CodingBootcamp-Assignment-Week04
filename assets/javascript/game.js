@@ -52,19 +52,22 @@ var battleVictoryCounter = 0;
 
 $(document).ready(function() {
 
+    //After having killed an enemy, this function allows the player to choose the next enemy and cleans up.
     function newEnemy() {
         gameState = 1;
         battleVictoryCounter++;
         $("#defeated_enemies").append($("#" + currentEnemy));
         $("#" + currentEnemy).children("p").addClass("defeated");
 
-        //Swap out enemy picture with dead enemy picture
-        $("#" + ourCharacter).children("img").removeClass("mirror");
-        $("#selected_character").append($("#" + ourCharacter));
-        $("#fight_selection").empty().append("<h2>Fight Selection</h2>");
+        //If time permits: swap out enemy picture with dead enemy picture
 
+        $("#" + ourCharacter).children("img").removeClass("mirror");
+        $("#character_window").children("h2").text("Selected Character");
+        $("#versus").remove();
+        $("#instructions_text").text("Great job! You've defeated " + eval(currentEnemy)["name"] + "! Click on an available enemy to start a new fight!");
     }
 
+    //New game button, full reinitialization.
     function newGame() {
         gameState = 0;
         battleVictoryCounter = 0;
@@ -86,9 +89,11 @@ $(document).ready(function() {
         $("#swordsman").empty().html("<img src=\"./assets/images/swordsman.jpg\">").prepend("<p class=\"name\">" + swordsman["name"] + "</p>").append("<p class=\"health_points\">HP: " + swordsman["healthPoints"] + "</p>");
         $("#archer").empty().html("<img src=\"./assets/images/archer.jpg\">").prepend("<p class=\"name\">" + archer["name"] + "</p>").append("<p class=\"health_points\">HP: " + archer["healthPoints"] + "</p>");
         $("#mage").empty().html("<img src=\"./assets/images/mage.jpg\">").prepend("<p class=\"name\">" + mage["name"] + "</p>").append("<p class=\"health_points\">HP: " + mage["healthPoints"] + "</p>");
-        $("#pick_character").append($("#gunner")).append($("#swordsman")).append($("#archer")).append($("#mage"));
-        $("#fight_selection").empty().append("<h2>Fight Selection</h2>");
-        $("#log_text").empty()
+        $("#character_window").children("h2").text("Character Selection");
+        $("#character_window").append($("#gunner")).append($("#swordsman")).append($("#archer")).append($("#mage"));
+        $("#versus").remove();
+        $("#log_text").empty();
+        $("#instructions_text").text("Welcome to the Stickfigure Showdown! Choose a character to get started...");
     }
 
 
@@ -103,8 +108,9 @@ $(document).ready(function() {
 
     $(".character").on("click", function() {
         if (gameState == 0) {
-            $("#selected_character").append(this);
+            $("#character_window").children("h2").text("Selected Character");
             ourCharacter = this.id;
+            $("#" + ourCharacter).addClass("us");
             ourCharacterIndex = enemies.indexOf(this.id);
             enemies.splice(ourCharacterIndex, 1);
             for (var i = 0; i < enemies.length; i++) {
@@ -112,22 +118,22 @@ $(document).ready(function() {
                 $("#" + enemies[i]).addClass("enemies");
                 $("#enemies_available").append($("#" + enemies[i]));
             }
+            $("#instructions_text").text("Great! You've chosen " + eval(ourCharacter)["name"] + "! Click on an available enemy to start a fight! But be careful--some enemies are stronger than others.");
             gameState = 1;
-    
-            //print something to the screen signifying that it's time to attack!
-            
+                        
         } else if (gameState == 1 && $(this).parent().attr("id") == "enemies_available") {
             currentEnemy = this.id;
             $("#" + ourCharacter).children("img").addClass("mirror");
-            $("#fight_selection").append($("#" + ourCharacter)).append("<div id=\"versus\">VERSUS</div>").append($("#" + currentEnemy));
-
+            $("#character_window").children("h2").text("Fight!");
+            $("#character_window").append("<div id=\"versus\">VERSUS</div>").append($("#" + currentEnemy));
+            $("#instructions_text").text("You've selected " + eval(currentEnemy)["name"] + " as your opponent. Click the attack button to duel it out!");
             gameState = 2;
         }
 
 
     });
 
-    $("#attack").on("click", function() {
+    $("#attack_button").on("click", function() {
         if (gameState == 0) {
             $("#log_text").html("<p>Pick your character first!</p>");
         } else if (gameState == 1) {
@@ -167,7 +173,8 @@ $(document).ready(function() {
                 $("#log_text").append("<p class=\"battle_victory\">You've beaten " + eval(currentEnemy)["name"] + "!");
                 newEnemy();
                 if (battleVictoryCounter == 3) {
-                    $("#log_text").append("<p class=\"game_victory\">You've won! Click \"new game\" to start a new game!</p>");
+                    $("#log_text").append("<p class=\"game_victory\">You've won! Click \"New Game\" to start a new game!</p>");
+                    $("#instructions_text").text("Way to go! You've won! Click \"New Game\" if you'd like to start a new game!");
                     gameState = 3;
                 }
             } else {            
@@ -178,7 +185,8 @@ $(document).ready(function() {
 
             if (eval(ourCharacter)["healthPoints"] == 0) {
                 $("#" + ourCharacter).children("p").addClass("defeated");
-                $("#log_text").append("<p class=\"game_defeat\">You've lost! Click \"new game\" to start a new game!</p>");
+                $("#log_text").append("<p class=\"game_defeat\">You've lost! Click \"New Game\" to start a new game!</p>");
+                $("#instructions_text").text("You've lost--better luck next time! Remember: some enemies are weaker than others--trying finding out who they are! Click \"New Game\" if you'd like to start a new game!");
                 gameState = 3;
             }
 
@@ -194,11 +202,7 @@ $(document).ready(function() {
         }
     });
 
-    $("#new_game").on("click", newGame);
-
-
-    // $(this).parent().attr("id") == "pick_character"
-    // $(this).parent().attr("id") == "enemies_available"
+    $("#newgame_button").on("click", newGame);
 
 
 
