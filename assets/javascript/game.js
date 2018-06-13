@@ -31,6 +31,8 @@ var mage = {
     counterAttackPower:25,
 };
 
+//Declare variables
+
 var enemies = ["gunner", "swordsman", "archer", "mage"];
 var currentEnemy = "";
 var ourCharacter = "";
@@ -41,12 +43,17 @@ var combatTargets = ["face", "chest", "gonads", "eye", "stomach"];
 
 
 var gameState = 0; 
-var battleVictoryCounter = 0;
 
+//gameState counter:
 //0 = select your character
 //1 = select your enemy
 //2 = enemy selected, attack
 //3 = victory/loss -> freeze the game
+
+var battleVictoryCounter = 0;
+
+//battleVictoryCounter counter represents # of enemies defeated. At 3, victory!
+
 
 //code
 
@@ -105,6 +112,8 @@ $(document).ready(function() {
     }
 
 
+    //Initial character name/HP
+
     $("#gunner").prepend("<p class=\"name\">" + gunner["name"] + "</p>").append("<p class=\"health_points\">HP: " + gunner["healthPoints"] + "</p>");
     $("#swordsman").prepend("<p class=\"name\">" + swordsman["name"] + "</p>").append("<p class=\"health_points\">HP: " + swordsman["healthPoints"] + "</p>");
     $("#archer").prepend("<p class=\"name\">" + archer["name"] + "</p>").append("<p class=\"health_points\">HP: " + archer["healthPoints"] + "</p>");
@@ -112,9 +121,10 @@ $(document).ready(function() {
 
 
 
-
+    //Listen for character clicks
 
     $(".character").on("click", function() {
+        //First click, move remaining characters to enemy, sit up the variables for indirect ID referencing, assign counterAttackPower
         if (gameState == 0) {
             $("#character_window").children("h2").text("Selected Character");
             ourCharacter = this.id;
@@ -128,7 +138,8 @@ $(document).ready(function() {
             }
             $("#instructions_text").text("Great! You've chosen " + eval(ourCharacter)["name"] + "! Click on an available enemy to start a fight! But be careful--some enemies are stronger than others.");
             gameState = 1;
-                        
+
+        //Second click, choose the enemy to fight.                        
         } else if (gameState == 1 && $(this).parent().attr("id") == "enemies_available") {
             currentEnemy = this.id;
             $("#" + ourCharacter).children("img").addClass("mirror");
@@ -141,6 +152,7 @@ $(document).ready(function() {
 
     });
 
+    //Attack!
     $("#attack_button").on("click", function() {
         if (gameState == 0) {
             $("#log_text").html("<p>Pick your character first!</p>");
@@ -173,24 +185,30 @@ $(document).ready(function() {
                 + " points of damage!</span></p>"
             );
 
-            //we hit first
+            //We always hit first; if the attack is mutually destructive, ours will go through and we won't get hurt
             eval(currentEnemy)["healthPoints"] = Math.max(eval(currentEnemy)["healthPoints"] - eval(ourCharacter)["attackPower"], 0);
             $("#" + currentEnemy).children(".health_points").html("HP: " + eval(currentEnemy)["healthPoints"]);
 
+            //Enemy death
             if (eval(currentEnemy)["healthPoints"] == 0) {
                 $("#log_text").append("<p class=\"battle_victory\">You've beaten " + eval(currentEnemy)["name"] + "!");
                 newEnemy();
+
+                //Last enemy death and victory
                 if (battleVictoryCounter == 3) {
                     $("#log_text").append("<p class=\"game_victory\">You've won! Click \"New Game\" to start a new game!</p>");
                     $("#instructions_text").text("Way to go! You've won! Click \"New Game\" if you'd like to start a new game!");
                     gameState = 3;
                 }
+
+            //Not an enemy death; therefore, depreciate both HP pools
             } else {            
                 eval(ourCharacter)["healthPoints"] = Math.max(eval(ourCharacter)["healthPoints"] - eval(currentEnemy)["counterAttackPower"], 0);
                 $("#" + ourCharacter).children(".health_points").html("HP: " + eval(ourCharacter)["healthPoints"]);
 
             }
 
+            //Our loss!
             if (eval(ourCharacter)["healthPoints"] == 0) {
                 $("#" + ourCharacter).children("p").addClass("defeated");
                 $("#log_text").append("<p class=\"game_defeat\">You've lost! Click \"New Game\" to start a new game!</p>");
@@ -198,6 +216,7 @@ $(document).ready(function() {
                 gameState = 3;
             }
 
+            //After each attack, increment our attack power
             eval(ourCharacter)["attackPower"] += 7;
 
 
