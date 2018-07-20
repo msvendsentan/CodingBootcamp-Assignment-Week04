@@ -1,4 +1,4 @@
-# Role-playing Game
+# Role-Playing Game
 
 The assignment was to create a simple role-playing game subject to certain specifications.
 
